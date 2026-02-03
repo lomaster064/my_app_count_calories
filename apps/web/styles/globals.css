@@ -1,0 +1,42 @@
+body {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  margin: 0;
+  background: #f7f7f7;
+  color: #222;
+}
+
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-top: 4px;
+  margin-bottom: 12px;
+}
+
+button {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+nav a {
+  margin-right: 12px;
+}
