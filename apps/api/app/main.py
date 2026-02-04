@@ -10,13 +10,15 @@ configure_logging()
 app = FastAPI(title="FitFuel API")
 
 cors_origins = [origin.strip() for origin in settings.cors_origins.split(",") if origin.strip()]
+allow_credentials = True
 if "*" in cors_origins:
     cors_origins = ["*"]
+    allow_credentials = False
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,
-    allow_credentials=True,
+    allow_credentials=allow_credentials,
     allow_methods=["*"],
     allow_headers=["*"],
 )
