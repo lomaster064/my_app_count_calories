@@ -13,8 +13,10 @@ router = APIRouter(prefix="/plans", tags=["plans"])
 
 
 @router.post("/generate")
-def generate_plan(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    result = generate_meal_plan(db, current_user)
+def generate_plan(
+    days: int = 30, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)
+):
+    result = generate_meal_plan(db, current_user, days=days)
     return result
 
 

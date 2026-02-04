@@ -27,6 +27,7 @@ class WorkoutDayOut(BaseModel):
     id: int
     date: date
     sessions: list[WorkoutSessionOut]
+    adjustment: str | None = None
 
     class Config:
         from_attributes = True

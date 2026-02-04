@@ -9,9 +9,10 @@ from app.models.user import User
 from app.utils.calculations import calculate_bmi, calculate_bmr, calculate_tdee, macro_targets, recommended_weight_range
 
 
-def generate_meal_plan(db: Session, user: User) -> dict:
+def generate_meal_plan(db: Session, user: User, days: int = 30) -> dict:
     today = date.today()
-    end = today + timedelta(days=29)
+    safe_days = max(1, min(days, 30))
+    end = today + timedelta(days=safe_days - 1)
 
     age = 30
     if user.birth_date:
@@ -23,8 +24,9 @@ def generate_meal_plan(db: Session, user: User) -> dict:
     recipes = db.query(Recipe).all()
     if user.diet_type:
         recipes = [r for r in recipes if user.diet_type in r.tags]
-    if user.allergies:
-        recipes = [r for r in recipes if not any(allergy in r.tags for allergy in user.allergies)]
+    blocked = set(user.allergies + user.intolerances + user.dislikes)
+    if blocked:
+        recipes = [r for r in recipes if not any(tag in blocked for tag in r.tags)]
 
     shuffle(recipes)
     plan = MealPlan(
@@ -38,7 +40,7 @@ def generate_meal_plan(db: Session, user: User) -> dict:
     )
 
     recipe_cycle = recipes or []
-    for offset in range(30):
+    for offset in range(safe_days):
         day_date = today + timedelta(days=offset)
         day = MealDay(
             date=day_date,

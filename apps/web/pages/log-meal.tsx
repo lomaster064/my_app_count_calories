@@ -4,6 +4,10 @@ import { apiBaseUrl } from "../utils/api";
 
 export default function LogMeal() {
   const [text, setText] = useState("");
+  const [calories, setCalories] = useState("0");
+  const [protein, setProtein] = useState("0");
+  const [fat, setFat] = useState("0");
+  const [carbs, setCarbs] = useState("0");
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -23,7 +27,17 @@ export default function LogMeal() {
       body: JSON.stringify({
         logged_date: new Date().toISOString().slice(0, 10),
         notes: text,
-        items: [],
+        items: [
+          {
+            name: text || "Ручной ввод",
+            grams_estimate: 0,
+            calories: Number(calories),
+            protein: Number(protein),
+            fat: Number(fat),
+            carbs: Number(carbs),
+            confidence: 1,
+          },
+        ],
       }),
     });
     if (!response.ok) {
@@ -70,6 +84,20 @@ export default function LogMeal() {
       <div className="card">
         <label>Описание приема пищи</label>
         <textarea value={text} onChange={(e) => setText(e.target.value)} />
+        <label>Калории (ккал)</label>
+        <input value={calories} onChange={(e) => setCalories(e.target.value)} />
+        <div className="grid two">
+          <div>
+            <label>Белки (г)</label>
+            <input value={protein} onChange={(e) => setProtein(e.target.value)} />
+          </div>
+          <div>
+            <label>Жиры (г)</label>
+            <input value={fat} onChange={(e) => setFat(e.target.value)} />
+          </div>
+        </div>
+        <label>Углеводы (г)</label>
+        <input value={carbs} onChange={(e) => setCarbs(e.target.value)} />
         <button onClick={submitText}>Отправить текст</button>
       </div>
       <div className="card">

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import auth, meal_logs, plans, profile, recipes, workouts
+from app.api.routes import auth, dashboard, meal_logs, plans, profile, recipes, water, workouts
 from app.core.config import settings
 from app.core.logging import configure_logging
 
@@ -29,6 +29,8 @@ app.include_router(plans.router)
 app.include_router(recipes.router)
 app.include_router(workouts.router)
 app.include_router(meal_logs.router)
+app.include_router(water.router)
+app.include_router(dashboard.router)
 
 
 @app.get("/")
