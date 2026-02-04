@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
+import { apiBaseUrl } from "../utils/api";
 
 interface DayItem {
   id: number;
@@ -13,7 +14,7 @@ export default function Calendar() {
   useEffect(() => {
     const fetchPlan = async () => {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/plans`, {
+      const response = await fetch(`${apiBaseUrl()}/plans`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.ok) {

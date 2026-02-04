@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Layout from "../components/Layout";
+import { apiBaseUrl } from "../utils/api";
 
 export default function LogMeal() {
   const [text, setText] = useState("");
@@ -16,7 +17,7 @@ export default function LogMeal() {
       setError("Нужен вход: авторизуйтесь перед логированием.");
       return;
     }
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/meal-logs`, {
+    const response = await fetch(`${apiBaseUrl()}/meal-logs`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify({
@@ -47,7 +48,7 @@ export default function LogMeal() {
     const formData = new FormData();
     formData.append("file", file);
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/meal-logs/photo?logged_date=${new Date().toISOString().slice(0, 10)}`,
+      `${apiBaseUrl()}/meal-logs/photo?logged_date=${new Date().toISOString().slice(0, 10)}`,
       {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },

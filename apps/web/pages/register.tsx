@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Layout from "../components/Layout";
+import { apiBaseUrl } from "../utils/api";
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -36,7 +37,7 @@ export default function Register() {
       meal_time_preferences: [],
       injuries: [],
     };
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
+    const response = await fetch(`${apiBaseUrl()}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -47,7 +48,7 @@ export default function Register() {
       setStatus("");
       return;
     }
-    const loginResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+    const loginResponse = await fetch(`${apiBaseUrl()}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: form.email, password: form.password }),

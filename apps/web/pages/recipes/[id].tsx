@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
+import { apiBaseUrl } from "../../utils/api";
 
 interface Recipe {
   id: number;
@@ -22,7 +23,7 @@ export default function RecipePage() {
   useEffect(() => {
     if (!id) return;
     const loadRecipe = async () => {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/recipes/${id}`);
+      const response = await fetch(`${apiBaseUrl()}/recipes/${id}`);
       if (response.ok) {
         setRecipe(await response.json());
       }

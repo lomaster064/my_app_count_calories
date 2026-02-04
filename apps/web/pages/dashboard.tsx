@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
+import { apiBaseUrl } from "../utils/api";
 
 interface PlanSummary {
   bmr: number;
@@ -21,7 +22,7 @@ export default function Dashboard() {
       setStatus("Нужен вход: сначала авторизуйтесь.");
       return;
     }
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/plans/generate`, {
+    const response = await fetch(`${apiBaseUrl()}/plans/generate`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
     });
