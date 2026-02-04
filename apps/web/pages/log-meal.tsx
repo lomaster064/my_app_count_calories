@@ -4,11 +4,18 @@ import Layout from "../components/Layout";
 export default function LogMeal() {
   const [text, setText] = useState("");
   const [status, setStatus] = useState("");
+  const [error, setError] = useState("");
   const [file, setFile] = useState<File | null>(null);
 
   const submitText = async () => {
     setStatus("Отправка...");
+    setError("");
     const token = localStorage.getItem("token");
+    if (!token) {
+      setStatus("");
+      setError("Нужен вход: авторизуйтесь перед логированием.");
+      return;
+    }
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/meal-logs`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -18,13 +25,25 @@ export default function LogMeal() {
         items: [],
       }),
     });
-    setStatus(response.ok ? "Сохранено" : "Ошибка");
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      setError(data.detail || "Ошибка сохранения");
+      setStatus("");
+      return;
+    }
+    setStatus("Сохранено");
   };
 
   const submitPhoto = async () => {
     if (!file) return;
     setStatus("Загрузка фото...");
+    setError("");
     const token = localStorage.getItem("token");
+    if (!token) {
+      setStatus("");
+      setError("Нужен вход: авторизуйтесь перед загрузкой фото.");
+      return;
+    }
     const formData = new FormData();
     formData.append("file", file);
     const response = await fetch(
@@ -36,7 +55,12 @@ export default function LogMeal() {
       }
     );
     const data = await response.json();
-    setStatus(response.ok ? JSON.stringify(data.result) : "Ошибка");
+    if (!response.ok) {
+      setError(data.detail || "Ошибка");
+      setStatus("");
+      return;
+    }
+    setStatus(JSON.stringify(data.result));
   };
 
   return (
@@ -50,9 +74,12 @@ export default function LogMeal() {
       <div className="card">
         <label>Загрузить фото</label>
         <input type="file" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
-        <button onClick={submitPhoto}>Отправить фото</button>
+        <button onClick={submitPhoto} className="secondary">
+          Отправить фото
+        </button>
       </div>
-      <p>{status}</p>
+      {status && <p className="status">{status}</p>}
+      {error && <p className="error">{error}</p>}
     </Layout>
   );
 }

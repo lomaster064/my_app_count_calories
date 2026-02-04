@@ -17,6 +17,10 @@ export default function Dashboard() {
   const generatePlan = async () => {
     setStatus("Генерация...");
     const token = localStorage.getItem("token");
+    if (!token) {
+      setStatus("Нужен вход: сначала авторизуйтесь.");
+      return;
+    }
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/plans/generate`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
@@ -35,7 +39,7 @@ export default function Dashboard() {
       <h1>Дашборд</h1>
       <div className="card">
         <button onClick={generatePlan}>Сгенерировать планы</button>
-        <p>{status}</p>
+        <p className="status">{status}</p>
         {summary && (
           <div>
             <p>BMR: {summary.bmr}</p>

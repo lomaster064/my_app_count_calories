@@ -28,7 +28,7 @@ export default function Onboarding() {
         <input name="dislikes" value={form.dislikes} onChange={handleChange} />
         <label>Травмы и ограничения</label>
         <textarea name="injuries" value={form.injuries} onChange={handleChange} />
-        <p>Данные анкеты сохраняются через API профиля.</p>
+        <p className="status">Данные анкеты сохраняются через API профиля.</p>
       </div>
     </Layout>
   );

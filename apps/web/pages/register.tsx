@@ -14,6 +14,7 @@ export default function Register() {
     training_level: "beginner",
   });
   const [status, setStatus] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -22,6 +23,7 @@ export default function Register() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("Отправка...");
+    setError("");
     const payload = {
       ...form,
       height_cm: Number(form.height_cm),
@@ -39,7 +41,22 @@ export default function Register() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-    setStatus(response.ok ? "Пользователь создан" : "Ошибка регистрации");
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      setError(data.detail || "Ошибка регистрации");
+      setStatus("");
+      return;
+    }
+    const loginResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: form.email, password: form.password }),
+    });
+    if (loginResponse.ok) {
+      const loginData = await loginResponse.json();
+      localStorage.setItem("token", loginData.access_token);
+    }
+    setStatus("Пользователь создан. Токен сохранен.");
   };
 
   return (
@@ -77,7 +94,8 @@ export default function Register() {
         </select>
         <button type="submit">Создать</button>
       </form>
-      <p>{status}</p>
+      {status && <p className="status">{status}</p>}
+      {error && <p className="error">{error}</p>}
     </Layout>
   );
 }

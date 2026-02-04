@@ -5,6 +5,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,8 +18,10 @@ export default function Login() {
     if (response.ok) {
       localStorage.setItem("token", data.access_token);
       setStatus("Успешный вход");
+      setError("");
     } else {
-      setStatus("Ошибка входа");
+      setStatus("");
+      setError(data.detail || "Ошибка входа");
     }
   };
 
@@ -32,7 +35,8 @@ export default function Login() {
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         <button type="submit">Войти</button>
       </form>
-      <p>{status}</p>
+      {status && <p className="status">{status}</p>}
+      {error && <p className="error">{error}</p>}
     </Layout>
   );
 }
