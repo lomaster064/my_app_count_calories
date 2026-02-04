@@ -28,7 +28,7 @@ API будет доступен на `http://localhost:8000/docs`, web — на 
 - Сидирование: `docker compose exec api python -m app.seed`
 
 ## Переменные окружения
-См. `.env.example`.
+См. `.env.example`. Для локальной сети можно задать `CORS_ORIGINS=*`, чтобы OPTIONS/POST запросы от фронтенда не блокировались.
 
 ## Создание пользователя
 Используйте `/auth/register` в Swagger UI.

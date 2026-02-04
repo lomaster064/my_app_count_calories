@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
-    cors_origins: str = "http://localhost:3000"
+    cors_origins: str = "*"
     minio_endpoint: str = "http://minio:9000"
     minio_root_user: str = "minio"
     minio_root_password: str = "minio123"

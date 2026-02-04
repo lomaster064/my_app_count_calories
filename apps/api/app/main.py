@@ -9,9 +9,13 @@ configure_logging()
 
 app = FastAPI(title="FitFuel API")
 
+cors_origins = [origin.strip() for origin in settings.cors_origins.split(",") if origin.strip()]
+if "*" in cors_origins:
+    cors_origins = ["*"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[origin.strip() for origin in settings.cors_origins.split(",")],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
